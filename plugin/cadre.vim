@@ -8,6 +8,10 @@ if !exists("g:cadre_active_auto")
   let g:cadre_active_auto = 1
 endif
 
+if !exists("g:cadre_line_hl_auto")
+  let g:cadre_line_hl_auto = 0
+endif
+
 if !exists("g:cadre_hit_sign")
   let g:cadre_hit_sign     = "✔"
 endif
@@ -38,20 +42,37 @@ let s:coverageFileRelPath = ".cadre/coverage.vim"
 let s:coverageFtimes = {}
 let s:allCoverage = {}
 
+function! s:CadreLineHl()
+  if !exists("b:cadre_line_hl")
+    let b:cadre_line_hl = g:cadre_line_hl_auto
+  endif
+endfunction
+
+function! s:SetupLineHighlight()
+  call s:CadreLineHl()
+  if(b:cadre_line_hl)
+    if exists("g:cadre_hit_line_color")
+      exec "highlight HitLine     " . g:cadre_hit_line_color
+    endif
+    if exists("g:cadre_miss_line_color")
+      exec "highlight MissLine    " . g:cadre_miss_line_color
+    endif
+    if exists("g:cadre_ignored_line_color")
+      exec "highlight IgnoredLine " . g:cadre_ignored_line_color
+    endif
+  else
+    highlight clear HitLine
+    highlight clear MissLine
+    highlight clear IgnoredLine
+  endif
+endfunction
+
 function! s:SetupHighlight()
   exec "highlight default  HitSign     " . g:cadre_hit_color
   exec "highlight default  MissSign    " . g:cadre_miss_color
   exec "highlight default  IgnoredSign " . g:cadre_ignored_color
 
-  if exists("g:cadre_hit_line_color")
-    exec "highlight default  HitLine     " . g:cadre_hit_line_color
-  endif
-  if exists("g:cadre_miss_line_color")
-    exec "highlight default  MissLine    " . g:cadre_miss_line_color
-  endif
-  if exists("g:cadre_ignored_line_color")
-    exec "highlight default  IgnoredLine " . g:cadre_ignored_line_color
-  endif
+  call s:SetupLineHighlight()
 endfunction
 
 function! AddSimplecovResults(file, results)
@@ -190,6 +211,18 @@ function! s:MarkUpBuffer(filepath)
   endif
 endfunction
 
+function! s:ToggleCadreLine()
+  call s:CadreActive()
+  call s:CadreLineHl()
+  let b:cadre_line_hl = !b:cadre_line_hl
+
+  call s:SetupLineHighlight()
+
+  if(b:cadre_line_hl && !b:cadre_active)
+    call s:ToggleCadre()
+  endif
+endfunction
+
 function! s:ToggleCadre()
   call s:CadreActive()
   let b:cadre_active = !b:cadre_active
@@ -211,14 +244,21 @@ function! s:DisableCadre()
   call s:ClearCoverageSigns()
 endfunction
 
-command! -nargs=0  Cov         call s:EnableCadre()
-command! -nargs=0  Uncov       call s:DisableCadre()
-command! -nargs=0  CadreToggle call s:ToggleCadre()
+command! -nargs=0  Cov             call s:EnableCadre()
+command! -nargs=0  Uncov           call s:DisableCadre()
+command! -nargs=0  CadreToggle     call s:ToggleCadre()
+command! -nargs=0  CadreToggleLine call s:ToggleCadreLine()
 
 if exists("g:cadre_mapping_toggle")
   exec "nmap <silent> " . g:cadre_mapping_toggle . " :CadreToggle<CR>"
 elseif empty(maparg("<Leader>cs", "n"))
   nnoremap <silent> <Leader>cs :CadreToggle<CR>
+endif
+
+if exists("g:cadre_mapping_toggle_line")
+  exec "nmap <silent> " . g:cadre_mapping_toggle_line . " :CadreToggleLine<CR>"
+elseif empty(maparg("<Leader>lcs", "n"))
+  nnoremap <silent> <Leader>lcs :CadreToggleLine<CR>
 endif
 
 augroup Cadre
