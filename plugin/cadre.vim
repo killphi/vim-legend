@@ -1,20 +1,58 @@
-""" Test Ally Vim plugin
-"hi  HitLine     ctermbg=Cyan     guibg=Cyan
-"hi  MissLine    ctermbg=Magenta  guibg=Magenta
-"hi  IgnoreLine  ctermbg=Black    guibg=Black
+if exists("g:loaded_cadre") || !has("signs") || &compatible
+  finish
+endif
+let g:loaded_cadre = 1
 
-hi  HitSign     ctermfg=6      cterm=bold   gui=bold    guifg=Green
-hi  MissSign    ctermfg=Red    cterm=bold   gui=bold    guifg=Red
-hi  IgnoredSign ctermfg=6      cterm=bold   gui=bold    guifg=Grey
-"
-sign  define  hit      linehl=HitLine      texthl=HitSign      text=✔
-sign  define  miss     linehl=MissLine     texthl=MissSign     text=✘
-sign  define  ignored  linehl=IgnoredLine  texthl=IgnoredSign  text=◌
+
+if !exists("g:cadre_active_auto")
+  let g:cadre_active_auto = 1
+endif
+
+if !exists("g:cadre_hit_sign")
+  let g:cadre_hit_sign     = "✔"
+endif
+if !exists("g:cadre_miss_sign")
+  let g:cadre_miss_sign    = "✘"
+endif
+if !exists("g:cadre_ignored_sign")
+  let g:cadre_ignored_sign = "◌"
+endif
+
+if !exists("g:cadre_hit_color")
+  let g:cadre_hit_color     = "ctermfg=6    cterm=bold  gui=bold  guifg=Green"
+endif
+if !exists("g:cadre_miss_color")
+  let g:cadre_miss_color    = "ctermfg=Red  cterm=bold  gui=bold  guifg=Red"
+endif
+if !exists("g:cadre_ignored_color")
+  let g:cadre_ignored_color = "ctermfg=6    cterm=bold  gui=bold  guifg=Grey"
+endif
+
+exec "sign define CadreHit     linehl=HitLine     texthl=HitSign     text=" . g:cadre_hit_sign
+exec "sign define CadreMiss    linehl=MissLine    texthl=MissSign    text=" . g:cadre_miss_sign
+exec "sign define CadreIgnored linehl=IgnoredLine texthl=IgnoredSign text=" . g:cadre_ignored_sign
+
 
 let s:coverageFileRelPath = ".cadre/coverage.vim"
 
 let s:coverageFtimes = {}
 let s:allCoverage = {}
+
+function! s:SetupHighlight()
+  exec "highlight default  HitSign     " . g:cadre_hit_color
+  exec "highlight default  MissSign    " . g:cadre_miss_color
+  exec "highlight default  IgnoredSign " . g:cadre_ignored_color
+
+  if exists("g:cadre_hit_line_color")
+    exec "highlight default  HitLine     " . g:cadre_hit_line_color
+  endif
+  if exists("g:cadre_miss_line_color")
+    exec "highlight default  MissLine    " . g:cadre_miss_line_color
+  endif
+  if exists("g:cadre_ignored_line_color")
+    exec "highlight default  IgnoredLine " . g:cadre_ignored_line_color
+  endif
+endfunction
 
 function! AddSimplecovResults(file, results)
   let s:allCoverage[fnamemodify(a:file, ":p")] = a:results
@@ -90,15 +128,15 @@ function! s:SetCoverageSigns(filename)
   endif
 
   for line in b:lineCoverage['hits']
-    call s:SetSign(a:filename, l:line, 'hit')
+    call s:SetSign(a:filename, l:line, 'CadreHit')
   endfor
 
   for line in b:lineCoverage['misses']
-    call s:SetSign(a:filename, l:line, 'miss')
+    call s:SetSign(a:filename, l:line, 'CadreMiss')
   endfor
 
   for line in b:lineCoverage['ignored']
-    call s:SetSign(a:filename, l:line, 'ignored')
+    call s:SetSign(a:filename, l:line, 'CadreIgnored')
   endfor
 endfunction
 
@@ -111,45 +149,80 @@ function! s:ClearCoverageSigns()
   endif
 endfunction
 
+function! s:CadreActive()
+  if !exists("b:cadre_active")
+    let b:cadre_active = g:cadre_active_auto
+  endif
+endfunction
+
 function! s:MarkUpBuffer(filepath)
+  call s:CadreActive()
+  if(!b:cadre_active)
+    " not active -> not needed
+    return
+  endif
+
+  call s:ClearCoverageSigns()
   let coverageFile = s:FindCoverageFile(a:filepath)
 
   if(coverageFile == '')
     echom "No coverage file"
-    return
-  endif
-
-  if(exists("b:coverageFtime") && getftime(coverageFile) <= b:coverageFtime)
-    "Coverage already done"
+    unlet b:cadre_active
     return
   endif
 
   if(&modified)
     echom "Buffer modified - coverage signs would likely be wrong"
+    unlet b:cadre_active
     return
   endif
 
   if(getftime(a:filepath) > getftime(coverageFile))
     echom "Code file is newer that coverage file - signs would likely be wrong"
+    unlet b:cadre_active
     return
   endif
 
   call s:LoadFileCoverage(a:filepath, l:coverageFile)
-  call s:ClearCoverageSigns()
-  call s:SetCoverageSigns(a:filepath)
-endfunction
 
-let s:filename = expand("<sfile>")
-function! s:AutocommandUncov(sourced)
-  if(a:sourced == s:filename)
-    call s:ClearCoverageSigns(expand("%:p"))
+  if(b:cadre_active)
+    call s:SetCoverageSigns(a:filepath)
   endif
 endfunction
 
-command! -nargs=0 Cov call s:SetCoverageSigns(expand("%:p"))
-command! -nargs=0 Uncov call s:ClearCoverageSigns()
+function! s:ToggleCadre()
+  call s:CadreActive()
+  let b:cadre_active = !b:cadre_active
 
-augroup SimpleCov
+  if(b:cadre_active)
+    call s:MarkUpBuffer(expand("%:p"))
+  else
+    call s:ClearCoverageSigns()
+  endif
+endfunction
+
+function! s:EnableCadre()
+  let b:cadre_active = 1
+  call s:MarkUpBuffer(expand("%:p"))
+endfunction
+
+function! s:DisableCadre()
+  let b:cadre_active = 0
+  call s:ClearCoverageSigns()
+endfunction
+
+command! -nargs=0  Cov         call s:EnableCadre()
+command! -nargs=0  Uncov       call s:DisableCadre()
+command! -nargs=0  CadreToggle call s:ToggleCadre()
+
+if exists("g:cadre_mapping_toggle")
+  exec "nmap <silent> " . g:cadre_mapping_toggle . " :CadreToggle<CR>"
+elseif empty(maparg("<Leader>cs", "n"))
+  nnoremap <silent> <Leader>cs :CadreToggle<CR>
+endif
+
+augroup Cadre
   au!
-  au BufWinEnter *.rb call s:MarkUpBuffer(expand('<afile>:p'))
+  au VimEnter             *.rb  call s:SetupHighlight()
+  au BufWinEnter,BufEnter *.rb  call s:MarkUpBuffer(expand('<afile>:p'))
 augroup end
