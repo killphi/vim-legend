@@ -265,6 +265,6 @@ endif
 
 augroup Cadre
   au!
-  au VimEnter             *.rb  call s:SetupHighlight()
-  au BufWinEnter,BufEnter *.rb  call s:MarkUpBuffer(expand('<afile>:p'))
+  au  Filetype ruby          call s:SetupHighlight()
+  au  BufWinEnter,BufEnter * if &ft=='ruby' | call s:MarkUpBuffer(expand('<afile>:p')) | endif
 augroup end
