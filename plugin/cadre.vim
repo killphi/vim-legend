@@ -7,9 +7,11 @@ let g:loaded_cadre = 1
 if !exists("g:cadre_active_auto")
   let g:cadre_active_auto = 1
 endif
-
 if !exists("g:cadre_line_hl_auto")
   let g:cadre_line_hl_auto = 0
+endif
+if !exists("g:cadre_file_path")
+  let g:cadre_file_path = ".cadre/coverage.vim"
 endif
 
 if !exists("g:cadre_hit_sign")
@@ -37,7 +39,7 @@ exec "sign define CadreMiss    linehl=MissLine    texthl=MissSign    text=" . g:
 exec "sign define CadreIgnored linehl=IgnoredLine texthl=IgnoredSign text=" . g:cadre_ignored_sign
 
 
-let s:coverageFileRelPath = ".cadre/coverage.vim"
+let s:coverageFileRelPath = g:cadre_file_path
 
 let s:coverageFtimes = {}
 let s:allCoverage = {}
