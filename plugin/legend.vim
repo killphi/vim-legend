@@ -1,66 +1,66 @@
-if exists("g:loaded_cadre") || !has("signs") || &compatible
+if exists("g:loaded_legend") || !has("signs") || &compatible
   finish
 endif
-let g:loaded_cadre = 1
+let g:loaded_legend = 1
 
 
-if !exists("g:cadre_active_auto")
-  let g:cadre_active_auto = 1
+if !exists("g:legend_active_auto")
+  let g:legend_active_auto = 1
 endif
-if !exists("g:cadre_line_hl_auto")
-  let g:cadre_line_hl_auto = 0
+if !exists("g:legend_line_hl_auto")
+  let g:legend_line_hl_auto = 0
 endif
-if !exists("g:cadre_file_path")
-  let g:cadre_file_path = ".cadre/coverage.vim"
-endif
-
-if !exists("g:cadre_hit_sign")
-  let g:cadre_hit_sign     = "✔"
-endif
-if !exists("g:cadre_miss_sign")
-  let g:cadre_miss_sign    = "✘"
-endif
-if !exists("g:cadre_ignored_sign")
-  let g:cadre_ignored_sign = "◌"
+if !exists("g:legend_file_path")
+  let g:legend_file_path = ".legend/coverage.vim"
 endif
 
-if !exists("g:cadre_hit_color")
-  let g:cadre_hit_color     = "ctermfg=6    cterm=bold  gui=bold  guifg=Green"
+if !exists("g:legend_hit_sign")
+  let g:legend_hit_sign     = "✔"
 endif
-if !exists("g:cadre_miss_color")
-  let g:cadre_miss_color    = "ctermfg=Red  cterm=bold  gui=bold  guifg=Red"
+if !exists("g:legend_miss_sign")
+  let g:legend_miss_sign    = "✘"
 endif
-if !exists("g:cadre_ignored_color")
-  let g:cadre_ignored_color = "ctermfg=6    cterm=bold  gui=bold  guifg=Grey"
+if !exists("g:legend_ignored_sign")
+  let g:legend_ignored_sign = "◌"
 endif
 
-exec "sign define CadreHit     linehl=HitLine     texthl=HitSign     text=" . g:cadre_hit_sign
-exec "sign define CadreMiss    linehl=MissLine    texthl=MissSign    text=" . g:cadre_miss_sign
-exec "sign define CadreIgnored linehl=IgnoredLine texthl=IgnoredSign text=" . g:cadre_ignored_sign
+if !exists("g:legend_hit_color")
+  let g:legend_hit_color     = "ctermfg=6    cterm=bold  gui=bold  guifg=Green"
+endif
+if !exists("g:legend_miss_color")
+  let g:legend_miss_color    = "ctermfg=Red  cterm=bold  gui=bold  guifg=Red"
+endif
+if !exists("g:legend_ignored_color")
+  let g:legend_ignored_color = "ctermfg=6    cterm=bold  gui=bold  guifg=Grey"
+endif
+
+exec "sign define LegendHit     linehl=HitLine     texthl=HitSign     text=" . g:legend_hit_sign
+exec "sign define LegendMiss    linehl=MissLine    texthl=MissSign    text=" . g:legend_miss_sign
+exec "sign define LegendIgnored linehl=IgnoredLine texthl=IgnoredSign text=" . g:legend_ignored_sign
 
 
-let s:coverageFileRelPath = g:cadre_file_path
+let s:coverageFileRelPath = g:legend_file_path
 
 let s:coverageFtimes = {}
 let s:allCoverage = {}
 
-function! s:CadreLineHl()
-  if !exists("b:cadre_line_hl")
-    let b:cadre_line_hl = g:cadre_line_hl_auto
+function! s:LegendLineHl()
+  if !exists("b:legend_line_hl")
+    let b:legend_line_hl = g:legend_line_hl_auto
   endif
 endfunction
 
 function! s:SetupLineHighlight()
-  call s:CadreLineHl()
-  if(b:cadre_line_hl)
-    if exists("g:cadre_hit_line_color")
-      exec "highlight HitLine     " . g:cadre_hit_line_color
+  call s:LegendLineHl()
+  if(b:legend_line_hl)
+    if exists("g:legend_hit_line_color")
+      exec "highlight HitLine     " . g:legend_hit_line_color
     endif
-    if exists("g:cadre_miss_line_color")
-      exec "highlight MissLine    " . g:cadre_miss_line_color
+    if exists("g:legend_miss_line_color")
+      exec "highlight MissLine    " . g:legend_miss_line_color
     endif
-    if exists("g:cadre_ignored_line_color")
-      exec "highlight IgnoredLine " . g:cadre_ignored_line_color
+    if exists("g:legend_ignored_line_color")
+      exec "highlight IgnoredLine " . g:legend_ignored_line_color
     endif
   else
     highlight clear HitLine
@@ -70,9 +70,9 @@ function! s:SetupLineHighlight()
 endfunction
 
 function! s:SetupHighlight()
-  exec "highlight default  HitSign     " . g:cadre_hit_color
-  exec "highlight default  MissSign    " . g:cadre_miss_color
-  exec "highlight default  IgnoredSign " . g:cadre_ignored_color
+  exec "highlight default  HitSign     " . g:legend_hit_color
+  exec "highlight default  MissSign    " . g:legend_miss_color
+  exec "highlight default  IgnoredSign " . g:legend_ignored_color
 
   call s:SetupLineHighlight()
 endfunction
@@ -151,15 +151,15 @@ function! s:SetCoverageSigns(filename)
   endif
 
   for line in b:lineCoverage['hits']
-    call s:SetSign(a:filename, l:line, 'CadreHit')
+    call s:SetSign(a:filename, l:line, 'LegendHit')
   endfor
 
   for line in b:lineCoverage['misses']
-    call s:SetSign(a:filename, l:line, 'CadreMiss')
+    call s:SetSign(a:filename, l:line, 'LegendMiss')
   endfor
 
   for line in b:lineCoverage['ignored']
-    call s:SetSign(a:filename, l:line, 'CadreIgnored')
+    call s:SetSign(a:filename, l:line, 'LegendIgnored')
   endfor
 endfunction
 
@@ -172,15 +172,15 @@ function! s:ClearCoverageSigns()
   endif
 endfunction
 
-function! s:CadreActive()
-  if !exists("b:cadre_active")
-    let b:cadre_active = g:cadre_active_auto
+function! s:LegendActive()
+  if !exists("b:legend_active")
+    let b:legend_active = g:legend_active_auto
   endif
 endfunction
 
 function! s:MarkUpBuffer(filepath)
-  call s:CadreActive()
-  if(!b:cadre_active)
+  call s:LegendActive()
+  if(!b:legend_active)
     " not active -> not needed
     return
   endif
@@ -190,80 +190,80 @@ function! s:MarkUpBuffer(filepath)
 
   if(coverageFile == '')
     echom "No coverage file"
-    unlet b:cadre_active
+    unlet b:legend_active
     return
   endif
 
   if(&modified)
     echom "Buffer modified - coverage signs would likely be wrong"
-    unlet b:cadre_active
+    unlet b:legend_active
     return
   endif
 
   if(getftime(a:filepath) > getftime(coverageFile))
     echom "Code file is newer that coverage file - signs would likely be wrong"
-    unlet b:cadre_active
+    unlet b:legend_active
     return
   endif
 
   call s:LoadFileCoverage(a:filepath, l:coverageFile)
 
-  if(b:cadre_active)
+  if(b:legend_active)
     call s:SetCoverageSigns(a:filepath)
   endif
 endfunction
 
-function! s:ToggleCadreLine()
-  call s:CadreActive()
-  call s:CadreLineHl()
-  let b:cadre_line_hl = !b:cadre_line_hl
+function! s:ToggleLegendLine()
+  call s:LegendActive()
+  call s:LegendLineHl()
+  let b:legend_line_hl = !b:legend_line_hl
 
   call s:SetupLineHighlight()
 
-  if(b:cadre_line_hl && !b:cadre_active)
-    call s:ToggleCadre()
+  if(b:legend_line_hl && !b:legend_active)
+    call s:ToggleLegend()
   endif
 endfunction
 
-function! s:ToggleCadre()
-  call s:CadreActive()
-  let b:cadre_active = !b:cadre_active
+function! s:ToggleLegend()
+  call s:LegendActive()
+  let b:legend_active = !b:legend_active
 
-  if(b:cadre_active)
+  if(b:legend_active)
     call s:MarkUpBuffer(expand("%:p"))
   else
     call s:ClearCoverageSigns()
   endif
 endfunction
 
-function! s:EnableCadre()
-  let b:cadre_active = 1
+function! s:EnableLegend()
+  let b:legend_active = 1
   call s:MarkUpBuffer(expand("%:p"))
 endfunction
 
-function! s:DisableCadre()
-  let b:cadre_active = 0
+function! s:DisableLegend()
+  let b:legend_active = 0
   call s:ClearCoverageSigns()
 endfunction
 
-command! -nargs=0  Cov             call s:EnableCadre()
-command! -nargs=0  Uncov           call s:DisableCadre()
-command! -nargs=0  CadreToggle     call s:ToggleCadre()
-command! -nargs=0  CadreToggleLine call s:ToggleCadreLine()
+command! -nargs=0  Cov             call s:EnableLegend()
+command! -nargs=0  Uncov           call s:DisableLegend()
+command! -nargs=0  LegendToggle     call s:ToggleLegend()
+command! -nargs=0  LegendToggleLine call s:ToggleLegendLine()
 
-if exists("g:cadre_mapping_toggle")
-  exec "nmap <silent> " . g:cadre_mapping_toggle . " :CadreToggle<CR>"
+if exists("g:legend_mapping_toggle")
+  exec "nmap <silent> " . g:legend_mapping_toggle . " :LegendToggle<CR>"
 elseif empty(maparg("<Leader>cs", "n"))
-  nnoremap <silent> <Leader>cs :CadreToggle<CR>
+  nnoremap <silent> <Leader>cs :LegendToggle<CR>
 endif
 
-if exists("g:cadre_mapping_toggle_line")
-  exec "nmap <silent> " . g:cadre_mapping_toggle_line . " :CadreToggleLine<CR>"
+if exists("g:legend_mapping_toggle_line")
+  exec "nmap <silent> " . g:legend_mapping_toggle_line . " :LegendToggleLine<CR>"
 elseif empty(maparg("<Leader>lcs", "n"))
-  nnoremap <silent> <Leader>lcs :CadreToggleLine<CR>
+  nnoremap <silent> <Leader>lcs :LegendToggleLine<CR>
 endif
 
-augroup Cadre
+augroup Legend
   au!
   au  Filetype ruby          call s:SetupHighlight()
   au  BufWinEnter,BufEnter * if &ft=='ruby' | call s:MarkUpBuffer(expand('<afile>:p')) | endif
