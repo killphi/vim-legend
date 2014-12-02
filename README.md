@@ -15,9 +15,9 @@ what code has been covered and what's not, it's super handy.
 
 ## Oh, a screenshot:
 
-<img src="https://raw.githubusercontent.com/killphi/vim-legend/master/vim.png" style="float: left">
-<img src="https://raw.githubusercontent.com/killphi/vim-legend/master/simplecov.png" style="float: left">
-<span style="clear: both"></span>
+Vim with Legend  | Simplecov HTML output
+-----------------|-----------------------
+<img src="https://raw.githubusercontent.com/killphi/vim-legend/master/vim.png" style="float: left"> | <img src="https://raw.githubusercontent.com/killphi/vim-legend/master/simplecov.png" style="float: left">
 
 # Installation
 
