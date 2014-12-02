@@ -246,8 +246,10 @@ function! s:DisableLegend()
   call s:ClearCoverageSigns()
 endfunction
 
-command! -nargs=0  Cov             call s:EnableLegend()
-command! -nargs=0  Uncov           call s:DisableLegend()
+command! -nargs=0  Cov              call s:EnableLegend() "deprecated
+command! -nargs=0  LegendEnable     call s:EnableLegend()
+command! -nargs=0  Uncov            call s:DisableLegend() "deprecated
+command! -nargs=0  LegendDisable    call s:DisableLegend()
 command! -nargs=0  LegendToggle     call s:ToggleLegend()
 command! -nargs=0  LegendToggleLine call s:ToggleLegendLine()
 
