@@ -4,7 +4,8 @@
 This plugin parses coverage files and creates signs in the left gutter to
 indicate which lines have been hit/missed/ignored.
 
-Currently, vim-legend parses the output of a Ruby gem called 'cadre,' but the
+Currently, vim-legend parses the output of a Ruby gem called
+[cadre](https://github.com/nyarly/cadre/), but the
 intention is to expand the possible coverage files to different coverage
 systems and languages.
 
