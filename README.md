@@ -1,18 +1,20 @@
 <!-- vim: set ft=markdown fo+=aw : Hurray for working on a Vim project -->
 # Vim-Legend
 
-This plugin parses coverage files and creates signs in the left gutter to
-indicate which lines have been hit/missed/ignored.
+This plugin sets up the sign column from coverage files to indicate which lines
+have been hit/missed/ignored, similar to the HTML output of coverage reporters
+like [simplecov](/colszowka/simplecov) for Ruby.
+Following naturally, this plugin needs Vim to be compiled with the `+signs` 
+feature.
 
-Currently, vim-legend parses the output of a Ruby gem called
-[cadre](https://github.com/nyarly/cadre/), but the
-intention is to expand the possible coverage files to different coverage
-systems and languages.
+Currently, vim-legend only parses the output of a Ruby gem called
+[cadre](/nyarly/cadre/), but the intention is to expand to
+different coverage systems and multiple languages.
 
-Once it's installed, it will detect coverage files whenever you enter a buffer.
-You'll see signs on the left of the file indicating what's been tested and
-what's not. Most of the time, they're easy to ignore and when you need to know
-what code has been covered and what's not, it's super handy.
+Once installed, it will try to detect respective coverage files whenever you
+enter a buffer. A quick glance at the sign colum will help you see what's been
+tested and what's not.
+Optionally, you are be able to highlight line background as well.
 
 ## Oh, a screenshot:
 
@@ -34,9 +36,11 @@ And then:
 :Bundle
 ```
 
-## Why "legend" ?
+## Why "legend"?
 
 In spy jargon, a "legend" is the cover story constructed by and agency for its
-operatives. So it's a kind of a play on words, you see. A legend is also the
-list of symbols on a map to describe what they mean. So, it's a tool to guide
-and protect you while you code.
+operatives.
+A legend is also that list on a map that explains all the symbols.
+
+You can look up the historically significant discussion [here on 
+Github](/killphi/vim-legend/issues/1).
