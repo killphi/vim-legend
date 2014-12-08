@@ -114,8 +114,13 @@ function! s:BestCoverage(coverageFile, coverageForName)
   endif
 endfunction
 
+function! s:message(message)
+  redraw
+  echom a:message
+endfunction
+
 function! s:emptyCoverage(coverageForName)
-  echom "No coverage recorded for " . a:coverageForName
+  call s:message("No coverage recorded for " . a:coverageForName)
   let b:lineCoverage = {'hits': [], 'misses': [], 'ignored': [] }
 endfunction
 
@@ -189,19 +194,19 @@ function! s:MarkUpBuffer(filepath)
   let coverageFile = s:FindCoverageFile(a:filepath)
 
   if(coverageFile == '')
-    echom "No coverage file"
+    call s:message("No coverage file")
     unlet b:legend_active
     return
   endif
 
   if(&modified)
-    echom "Buffer modified - coverage signs would likely be wrong"
+    call s:message("Buffer modified - coverage signs would likely be wrong")
     unlet b:legend_active
     return
   endif
 
   if(getftime(a:filepath) > getftime(coverageFile))
-    echom "Code file is newer that coverage file - signs would likely be wrong"
+    call s:message("Code file is newer that coverage file - signs would likely be wrong")
     unlet b:legend_active
     return
   endif
