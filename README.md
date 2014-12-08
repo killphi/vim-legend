@@ -4,7 +4,8 @@
 This plugin parses coverage files and creates signs in the left gutter to
 indicate which lines have been hit/missed/ignored.
 
-Currently, vim-legend parses the output of a Ruby gem called 'cadre,' but the
+Currently, vim-legend parses the output of a Ruby gem called
+[cadre](https://github.com/nyarly/cadre/), but the
 intention is to expand the possible coverage files to different coverage
 systems and languages.
 
@@ -15,9 +16,9 @@ what code has been covered and what's not, it's super handy.
 
 ## Oh, a screenshot:
 
-<img src="https://raw.githubusercontent.com/killphi/vim-legend/master/vim.png" style="float: left">
-<img src="https://raw.githubusercontent.com/killphi/vim-legend/master/simplecov.png" style="float: left">
-<span style="clear: both"></span>
+Vim with Legend  | Simplecov HTML output
+-----------------|-----------------------
+<img src="https://raw.githubusercontent.com/killphi/vim-legend/master/vim.png" style="float: left"> | <img src="https://raw.githubusercontent.com/killphi/vim-legend/master/simplecov.png" style="float: left">
 
 # Installation
 
