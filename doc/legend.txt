@@ -2,7 +2,7 @@ legend.txt      Plugin: set up signs for code files based on coverage
 
 INTRODUCTION                                                        *legend*
 
-This plugin parses coverage files and creates signs in the left gutter to
+This plugin parses coverage files and creates |signs| in the left gutter to
 indicate which lines have been hit/missed/ignored.
 
 Currently, vim-legend parses the output of a Ruby gem called 'cadre,' but the
@@ -14,58 +14,60 @@ buffer.  You'll see signs on the left of the file indicating what's been
 tested and what's not. Most of the time, they're easy to ignore and when you
 need to know what code has been covered and what's not, it's super handy.
 
+
 GLOBAL OPTIONS                                               *legend-options*
+
 
 You can control how Legend behaves by setting some global variables in e.g.
 your .vimrc file. In every case, the example is the default value.
 
-                                                        *'legend_active_auto'*
+                                                *'legend_active_auto'*
 Whether Legend should activate automatically if there's a coverage file
 available. If you want to be in control of that, set to 0.
   let g:legend_active_auto = 1
 
-                                                       *'legend_line_hl_auto'*
+                                                *'legend_line_hl_auto'*
 Whether Legend should highlight lines automatically if there's a coverage
 file. The default is not to highlight lines - just to set up sign.
 Highlighting can make things clearer, but be more distracting.
   let g:legend_line_hl_auto = 0
 
-                                                          *'legend_file_path'*
+                                                *'legend_file_path'*
 Where Legend should look for a coverage file. Might be especially useful to
 override in a ftplugin.
   let g:legend_file_path = ".cadre/coverage.vim"
 
-                                                           *'legend_hit_sign'*
+                                                *'legend_hit_sign'*
 The character to mark lines of code that have been covered. These characters
 default to Unicode checkmarks etc, which may not be available. You can use up
 to two characters here, so if you want to stay in 8-bits try "ok" here.
   let g:legend_hit_sign     = "✔"
 
-                                                          *'legend_miss_sign'*
+                                                *'legend_miss_sign'*
 The character to mark lines of code that have not been covered. Like
 |'legend_hit_sign'| you can use up to two characters, so "xx" is a reasonable
 substitute.
   let g:legend_miss_sign    = "✘"
 
-                                                       *'legend_ignored_sign'*
+                                                *'legend_ignored_sign'*
 The character to mark lines of code that can't be meaningfully covered - e.g.
 comments or empty lines.
   let g:legend_ignored_sign = "◌"
 
-                                                          *'legend_hit_color'*
+                                                *'legend_hit_color'*
 The highlighting codes for hit lines - see |highlight-term|
   let g:legend_hit_color     = "ctermfg=6    cterm=bold  gui=bold  guifg=Green"
 
-                                                         *'legend_miss_color'*
+                                                *'legend_miss_color'*
 The highlighting codes for missed lines - see |highlight-term|
   let g:legend_miss_color    = "ctermfg=Red  cterm=bold  gui=bold  guifg=Red"
 
-                                                      *'legend_ignored_color'*
+                                                *'legend_ignored_color'*
 The highlighting codes for ignored lines - see |highlight-term|
   let g:legend_ignored_color = "ctermfg=6    cterm=bold  gui=bold  guifg=Grey"
 
 
-                                                     *'legend_mapping_toggle'*
+                                                *'legend_mapping_toggle'*
 You can change the mapping that Legend uses to toggle coverage here.
   let g:legend_mapping_toggle = <Leader>cs
 
@@ -74,19 +76,21 @@ You can change the mapping that Legend uses to toggle coverage of individual
 lines here.
   let g:legend_mapping_toggle_line = <Leader>lcs
 
+
 COMMANDS AND MAPPINGS                                       *legend-commands*
+
 
 For the most part, Legend should Just Work, but there may be times when you
 need to have a little more control.
 
-                                                               *:LegendEnable*
+                                                           *:LegendEnable*
 Enables coverage explicitly. If you've disabled automatic coverage or disabled
 it separately. See also |legend-mappings|
-                                                              *:LegendDisable*
+                                                           *:LegendDisable*
 Explicitly disables coverage signs. Can be useful in order to use the signs
 gutter for other things - a debugger, syntax markup, etc.
 
-                                                               *:LegendToggle*
+                                                           *:LegendToggle*
 Toggles Legend - essentially |:LegendEnable| if coverage is disabled or
 |:LegendDisable| if enabled.
 
@@ -94,18 +98,11 @@ Toggles Legend - essentially |:LegendEnable| if coverage is disabled or
 Toggles Legend for a single line, which might enable more powerful use with
 other tools.
 
-                                                             *legend-mappings*
+                                                           *legend-mappings*
 Legend sets up two mappings by default: one for |:LegendToggle| and one for
 |:LegendToggleLine|. By default, they're <Leader>cs (usually '\cs' but c.f.
 |mapleader|) for :LegendToggle and <Leader>lcs for :LegendToggleLine.
 
 
-WHY LEGEND?                                            *legend-name-rationale*
 
-In spy jargon, a "legend" is the cover story constructed by and agency for its
-operatives. So it's a kind of a play on words, you see. A legend is also the
-list of symbols on a map to describe what they mean. So, it's a tool to guide
-and protect you while you code.
-
-
- vim:tw=78:ts=8:ft=help:norl:
+" vim:tw=78:ts=8:ft=help:norl:
