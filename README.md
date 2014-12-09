@@ -4,7 +4,7 @@
 This plugin sets up the sign column from coverage files to indicate which lines
 have been hit/missed/ignored, similar to the HTML output of coverage reporters
 like [simplecov](https://github.com/colszowka/simplecov) for Ruby.
-Following naturally, this plugin needs Vim to be compiled with the `+signs` 
+Following naturally, this plugin needs Vim to be compiled with the `+signs`
 feature.
 
 Currently, vim-legend only parses the output of a Ruby gem called
@@ -22,19 +22,15 @@ Vim with Legend  | Simplecov HTML output
 -----------------|-----------------------
 <img src="https://raw.githubusercontent.com/killphi/vim-legend/master/vim.png" style="float: left"> | <img src="https://raw.githubusercontent.com/killphi/vim-legend/master/simplecov.png" style="float: left">
 
-# Installation
+## Installation
 
-You should be able to use your preferred Vim package manager. I for one like Vundle:
+You should be able to use your preferred Vim plugin manager.
 
-Add this to your .vimrc:
-```
-Bundle 'killphi/vim-legend'
-```
+If you don't have one yet, here are our preferences:
+- [Vundle](https://github.com/gmarik/Vundle.vim)
+- [NeoBundle](https://github.com/Shougo/neobundle.vim)
 
-And then:
-```
-:Bundle
-```
+Just follow the instructions of the respective manage.
 
 ## Why "legend"?
 
