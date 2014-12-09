@@ -3,12 +3,12 @@
 
 This plugin sets up the sign column from coverage files to indicate which lines
 have been hit/missed/ignored, similar to the HTML output of coverage reporters
-like [simplecov](/colszowka/simplecov) for Ruby.
+like [simplecov](https://github.com/colszowka/simplecov) for Ruby.
 Following naturally, this plugin needs Vim to be compiled with the `+signs` 
 feature.
 
 Currently, vim-legend only parses the output of a Ruby gem called
-[cadre](/nyarly/cadre/), but the intention is to expand to
+[cadre](https://github.com/nyarly/cadre/), but the intention is to expand to
 different coverage systems and multiple languages.
 
 Once installed, it will try to detect respective coverage files whenever you
@@ -41,6 +41,3 @@ And then:
 In spy jargon, a "legend" is the cover story constructed by and agency for its
 operatives.
 A legend is also that list on a map that explains all the symbols.
-
-You can look up the historically significant discussion [here on 
-Github](/killphi/vim-legend/issues/1).
