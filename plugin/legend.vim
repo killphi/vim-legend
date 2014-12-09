@@ -5,13 +5,13 @@ let g:loaded_legend = 1
 
 
 if !exists("g:legend_active_auto")
-  let g:legend_active_auto = 1
+  let g:legend_active_auto  = 1
 endif
 if !exists("g:legend_line_hl_auto")
   let g:legend_line_hl_auto = 0
 endif
 if !exists("g:legend_file_path")
-  let g:legend_file_path = ".cadre/coverage.vim"
+  let g:legend_file_path    = ".cadre/coverage.vim"
 endif
 
 if !exists("g:legend_hit_sign")
