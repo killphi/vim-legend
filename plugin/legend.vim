@@ -34,9 +34,9 @@ if !exists("g:legend_ignored_color")
   let g:legend_ignored_color = "ctermfg=6    cterm=bold  gui=bold  guifg=Grey"
 endif
 
-exec "sign define LegendHit     linehl=HitLine     texthl=HitSign     text=" . g:legend_hit_sign
-exec "sign define LegendMiss    linehl=MissLine    texthl=MissSign    text=" . g:legend_miss_sign
-exec "sign define LegendIgnored linehl=IgnoredLine texthl=IgnoredSign text=" . g:legend_ignored_sign
+exec "sign define LegendHit     linehl=LegendHitLine     texthl=LegendHitSign     text=" . g:legend_hit_sign
+exec "sign define LegendMiss    linehl=LegendMissLine    texthl=LegendMissSign    text=" . g:legend_miss_sign
+exec "sign define LegendIgnored linehl=LegendIgnoredLine texthl=LegendIgnoredSign text=" . g:legend_ignored_sign
 
 
 let s:coverageFileRelPath = g:legend_file_path
@@ -54,25 +54,25 @@ function! s:SetupLineHighlight()
   call s:LegendLineHl()
   if(b:legend_line_hl)
     if exists("g:legend_hit_line_color")
-      exec "highlight HitLine     " . g:legend_hit_line_color
+      exec "highlight LegendHitLine     " . g:legend_hit_line_color
     endif
     if exists("g:legend_miss_line_color")
-      exec "highlight MissLine    " . g:legend_miss_line_color
+      exec "highlight LegendMissLine    " . g:legend_miss_line_color
     endif
     if exists("g:legend_ignored_line_color")
-      exec "highlight IgnoredLine " . g:legend_ignored_line_color
+      exec "highlight LegendIgnoredLine " . g:legend_ignored_line_color
     endif
   else
-    highlight clear HitLine
-    highlight clear MissLine
-    highlight clear IgnoredLine
+    highlight clear LegendHitLine
+    highlight clear LegendMissLine
+    highlight clear LegendIgnoredLine
   endif
 endfunction
 
 function! s:SetupHighlight()
-  exec "highlight default  HitSign     " . g:legend_hit_color
-  exec "highlight default  MissSign    " . g:legend_miss_color
-  exec "highlight default  IgnoredSign " . g:legend_ignored_color
+  exec "highlight default  LegendHitSign     " . g:legend_hit_color
+  exec "highlight default  LegendMissSign    " . g:legend_miss_color
+  exec "highlight default  LegendIgnoredSign " . g:legend_ignored_color
 
   call s:SetupLineHighlight()
 endfunction
