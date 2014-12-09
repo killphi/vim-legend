@@ -265,14 +265,14 @@ command! -nargs=0  LegendToggleLine call s:ToggleLegendLine()
 
 if exists("g:legend_mapping_toggle")
   exec "nmap <silent> " . g:legend_mapping_toggle . " :LegendToggle<CR>"
-elseif empty(maparg("<Leader>cs", "n"))
-  nnoremap <silent> <Leader>cs :LegendToggle<CR>
+elseif empty(maparg("<Leader>lt", "n"))
+  nnoremap <silent> <Leader>lt :LegendToggle<CR>
 endif
 
 if exists("g:legend_mapping_toggle_line")
   exec "nmap <silent> " . g:legend_mapping_toggle_line . " :LegendToggleLine<CR>"
-elseif empty(maparg("<Leader>lcs", "n"))
-  nnoremap <silent> <Leader>lcs :LegendToggleLine<CR>
+elseif empty(maparg("<Leader>ltl", "n"))
+  nnoremap <silent> <Leader>ltl :LegendToggleLine<CR>
 endif
 
 augroup Legend
