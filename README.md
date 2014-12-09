@@ -30,7 +30,7 @@ If you don't have one yet, here are our preferences:
 - [Vundle](https://github.com/gmarik/Vundle.vim)
 - [NeoBundle](https://github.com/Shougo/neobundle.vim)
 
-Just follow the instructions of the respective manage.
+Just follow the instructions of the respective plugin manager.
 
 ## Why "legend"?
 
