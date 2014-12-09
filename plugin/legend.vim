@@ -177,14 +177,14 @@ function! s:ClearCoverageSigns()
   endif
 endfunction
 
-function! s:LegendActive()
+function! s:IsLegendActive()
   if !exists("b:legend_active")
     let b:legend_active = g:legend_active_auto
   endif
 endfunction
 
 function! s:MarkUpBuffer(filepath)
-  call s:LegendActive()
+  call s:IsLegendActive()
   if(!b:legend_active)
     " not active -> not needed
     return
@@ -219,7 +219,7 @@ function! s:MarkUpBuffer(filepath)
 endfunction
 
 function! s:ToggleLegendLine()
-  call s:LegendActive()
+  call s:IsLegendActive()
   call s:LegendLineHl()
   let b:legend_line_hl = !b:legend_line_hl
 
@@ -231,7 +231,7 @@ function! s:ToggleLegendLine()
 endfunction
 
 function! s:ToggleLegend()
-  call s:LegendActive()
+  call s:IsLegendActive()
   let b:legend_active = !b:legend_active
 
   if(b:legend_active)
