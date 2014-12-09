@@ -277,6 +277,6 @@ endif
 
 augroup Legend
   au!
-  au  Filetype ruby          call s:SetupHighlight()
-  au  BufWinEnter,BufEnter * if &ft=='ruby' | call s:MarkUpBuffer(expand('<afile>:p')) | endif
+  au  Filetype *  call s:SetupHighlight()
+  au  BufEnter *  call s:MarkUpBuffer(expand('<afile>:p'))
 augroup end
