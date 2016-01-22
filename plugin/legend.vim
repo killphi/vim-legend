@@ -3,6 +3,9 @@ if exists("g:loaded_legend") || !has("signs") || &compatible
 endif
 let g:loaded_legend = 1
 
+if !exists("g:legend_chatty")
+  let g:legend_chatty = 0
+endif
 
 if !exists("g:legend_active_auto")
   let g:legend_active_auto = 1
@@ -105,6 +108,11 @@ function! s:BestCoverage(coverageFile, coverageForName)
     endfor
   endif
 
+  if(exists("b:lineCoverage"))
+    let b:oldLineCoverage = b:lineCoverage
+  else
+    let b:oldLineCoverage = { 'hits': [], 'misses': [], 'ignored': [] }
+  endif
   if exists("found")
     let b:lineCoverage = s:allCoverage[a:coverageFile][l:found]
     let b:coverageName = found
@@ -115,8 +123,10 @@ function! s:BestCoverage(coverageFile, coverageForName)
 endfunction
 
 function! s:message(message)
-  redraw
-  echom a:message
+  if(g:legend_chatty == 1)
+    redraw
+    echom a:message
+  endif
 endfunction
 
 function! s:emptyCoverage(coverageForName)
@@ -141,18 +151,16 @@ endfunction
 function s:SetSign(filename, line, type)
   let id = b:coverageSignIndex
   let b:coverageSignIndex += 1
-  let b:coverageSigns += [id]
-  exe ":sign place ".id." line=".a:line." name=".a:type." file=" . a:filename
+  let b:coverageSigns[a:line] = {'id': id, 'file': a:filename, 'type': a:type }
 endfunction
 
 "XXX locating buffer + codeFile...
 function! s:SetCoverageSigns(filename)
-  if (! exists("b:coverageSigns"))
-    let b:coverageSigns = []
-  endif
+  let len = max([ max(b:lineCoverage['hits']), max(b:lineCoverage['misses']), max(b:lineCoverage['ignored']) ])
+  let b:coverageSigns = repeat([{'type': 'unknown'}], len+1)
 
   if (! exists("b:coverageSignIndex"))
-    let b:coverageSignIndex = 1
+    let b:coverageSignIndex = 1000 "Basically a magic number to avoid clobbering other signsets
   endif
 
   for line in b:lineCoverage['hits']
@@ -169,11 +177,32 @@ function! s:SetCoverageSigns(filename)
 endfunction
 
 function! s:ClearCoverageSigns()
+  let b:coverageSigns = []
+endfunction
+
+function! s:UpdateSigns()
+  let index = 1
+  while index < len(b:coverageSigns) || index < len(b:oldCoverageSigns)
+    let current = get(b:coverageSigns, index, {'type':'unknown'})
+    let old = get(b:oldCoverageSigns, index, {'type':'unknown'})
+
+    if(current['type'] != old['type'])
+      if(old['type'] != 'unknown')
+        exe ":sign unplace ".old['id']
+      endif
+      if(current['type'] != 'unknown')
+        exe ":sign place ".current['id']." line=".index." name=".current['type']." file=" . current['file']
+      endif
+    endif
+    let index+=1
+  endwhile
+endfunction
+
+function! s:CaptureCurrentSigns()
   if(exists("b:coverageSigns"))
-    for signId in b:coverageSigns
-      exe ":sign unplace ".signId
-    endfor
-    unlet! b:coverageSigns
+    let b:oldCoverageSigns = b:coverageSigns
+  else
+    let b:oldCoverageSigns = []
   endif
 endfunction
 
@@ -190,32 +219,32 @@ function! s:MarkUpBuffer(filepath)
     return
   endif
 
-  call s:ClearCoverageSigns()
   let coverageFile = s:FindCoverageFile(a:filepath)
 
   if(coverageFile == '')
     call s:message("No coverage file")
     unlet b:legend_active
-    return
   endif
 
   if(&modified)
     call s:message("Buffer modified - coverage signs would likely be wrong")
     unlet b:legend_active
-    return
   endif
 
   if(getftime(a:filepath) > getftime(coverageFile))
     call s:message("Code file is newer that coverage file - signs would likely be wrong")
     unlet b:legend_active
-    return
   endif
 
   call s:LoadFileCoverage(a:filepath, l:coverageFile)
 
+  call s:CaptureCurrentSigns()
   if(b:legend_active)
     call s:SetCoverageSigns(a:filepath)
+  else
+    call s:ClearCoverageSigns()
   endif
+  call s:UpdateSigns()
 endfunction
 
 function! s:ToggleLegendLine()
