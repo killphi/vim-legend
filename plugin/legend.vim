@@ -207,7 +207,7 @@ function! s:CaptureCurrentSigns()
 endfunction
 
 function! s:LegendActive()
-  if !exists("b:legend_active")
+  if(!exists("b:legend_active"))
     let b:legend_active = g:legend_active_auto
   endif
 endfunction
@@ -220,26 +220,29 @@ function! s:MarkUpBuffer(filepath)
   endif
 
   let coverageFile = s:FindCoverageFile(a:filepath)
+  let doIt = 1
 
   if(coverageFile == '')
     call s:message("No coverage file")
-    unlet b:legend_active
+    let doIt = 0
   endif
 
   if(&modified)
     call s:message("Buffer modified - coverage signs would likely be wrong")
-    unlet b:legend_active
+    let doIt = 0
   endif
 
-  if(getftime(a:filepath) > getftime(coverageFile))
+  if(doIt && getftime(a:filepath) > getftime(coverageFile))
     call s:message("Code file is newer that coverage file - signs would likely be wrong")
-    unlet b:legend_active
+    let doIt = 0
   endif
-
-  call s:LoadFileCoverage(a:filepath, l:coverageFile)
 
   call s:CaptureCurrentSigns()
-  if(b:legend_active)
+
+
+  if(b:legend_active && doIt)
+  call s:LoadFileCoverage(a:filepath, l:coverageFile)
+
     call s:SetCoverageSigns(a:filepath)
   else
     call s:ClearCoverageSigns()
