@@ -40,3 +40,11 @@ In spy jargon, a "legend" is the cover story constructed by and agency for its
 operatives. So it's a kind of a play on words, you see. A legend is also the
 list of symbols on a map to describe what they mean. So, it's a tool to guide
 and protect you while you code.
+
+## Adapters
+
+The actual format vim-legend uses is just a Vim script, and pretty simple at that.
+It's possible to write programs to convert the output of other coverage tools
+into the vim-legend format.
+In fact, there's already a program to do this for Go:
+https://github.com/nyarly/legendary
